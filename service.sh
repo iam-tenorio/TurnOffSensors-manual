@@ -1,0 +1,20 @@
+#!/system/bin/sh
+
+# Ativa a função ao dar boot no sistema
+while ! service list | grep -q sensor_privacy; do
+  sleep 0.1
+done
+
+# Obtém a versão do android
+ANDROID_VERSION=$(getprop ro.build.version.release)
+case "$ANDROID_VERSION" in
+  13|14|15|16|17)
+    service call sensor_privacy 9 i32 1
+    ;;
+  12)
+    service call sensor_privacy 8 i32 1
+    ;;
+  10|11)
+    service call sensor_privacy 4 i32 1
+    ;;
+esac
